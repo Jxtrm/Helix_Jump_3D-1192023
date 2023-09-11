@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private int bestScore;
-    [SerializeField] private int currentScore;
+    public int bestScore;
+    public int currentScore;
     [SerializeField] private int currentLevel = 0;
     public static GameManager singleton;
     // Start is called before the first frame update
@@ -21,12 +21,14 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        bestScore = PlayerPrefs.GetInt("HighScore");
     }
 
     // Update is called once per frame
     public void NextLevel()
     {
-        
+        Debug.Log("Pasas de Nivel");
     }
 
     public void RestartLevel()
@@ -40,6 +42,7 @@ public class GameManager : MonoBehaviour
         if (currentScore > bestScore)
         {
             bestScore = currentScore;
+            PlayerPrefs.SetInt("HighScore", currentScore);
         }
     }
 }

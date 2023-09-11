@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+        GameManager.singleton.AddScore(1);
         rb.velocity = Vector3.zero;
         rb.AddForce(Vector3.up * impulsePlayer, ForceMode.Impulse);
         ignoreNextCollision = true;
