@@ -5,19 +5,19 @@ using UnityEngine;
 public class HelixController : MonoBehaviour
 {
     private Vector2 lastTapPosition;
-    private Vector3 startPosition;
+    private Vector3 startRotation;
+    private List<GameObject> spawnedLevels = new List<GameObject>();
     public Transform topTransform; 
     public Transform goalTransform;
     public GameObject helixLevelPrefab;
     public List<Stage> allStages = new List<Stage>();
     public float helixDistance;
-    private List<GameObject> spawnedLevels = new List<GameObject>();
 
     private void Awake()
     {
-        startPosition = transform.localEulerAngles;
-        helixDistance = topTransform.localPosition.y - goalTransform.localPosition.y + .1f;
-        //LoadStage(0);
+        startRotation = transform.localEulerAngles;
+        helixDistance = topTransform.localPosition.y - (goalTransform.localPosition.y + .1f);
+        LoadStage(0);
     }
 
     // Update is called once per frame
@@ -43,6 +43,75 @@ public class HelixController : MonoBehaviour
 
     public void LoadStage(int stageNumber)
     {
+        Stage stage = allStages[Mathf.Clamp(stageNumber, 0, allStages.Count - 1)];
+        if (stage == null)
+        {
+            Debug.Log("No Stages");
+            return;
+        }
 
+        Camera.main.backgroundColor=allStages[stageNumber].stageBackgroundColor;
+
+        FindObjectOfType<PlayerController>().GetComponent<Renderer>().material.color = allStages[stageNumber].stageBackgroundColor;
+
+        transform.localEulerAngles = startRotation;
+
+        foreach (GameObject go in spawnedLevels)
+        {
+            Destroy(go);
+        }
+
+        float levelDistance = helixDistance / stage.levels.Count;
+        float spawnPosY = topTransform.localPosition.y;
+
+        for (int i = 0; i < stage.levels.Count; i++)
+        {
+            spawnPosY -= levelDistance;
+
+            GameObject level = Instantiate(helixLevelPrefab, transform);
+
+            level.transform.localPosition = new Vector3(0, spawnPosY, 0);
+
+            spawnedLevels.Add(level);
+
+            int partsToDisable = 12 - stage.levels[i].partCount;
+
+            List<GameObject> disableParts = new List<GameObject>();
+
+            while (disableParts.Count<partsToDisable)
+            {
+                GameObject randomPart = level.transform.GetChild(Random.Range(0, level.transform.childCount)).gameObject;
+
+                if (!disableParts.Contains(randomPart))
+                {
+                    randomPart.SetActive(false);
+                    disableParts.Add(randomPart);
+                }
+            }
+
+            List<GameObject> lefParts = new List<GameObject>();
+
+            foreach (Transform t in level.transform)
+            {
+                t.GetComponent<Renderer>().material.color = allStages[stageNumber].stageLevelPartColor;
+                if (t.gameObject.activeInHierarchy)
+                {
+                    lefParts.Add(t.gameObject);
+                }
+            }
+
+            List<GameObject> deathParts = new List<GameObject>();
+
+            while (deathParts.Count<stage.levels[i].DeathPartCount)
+            {
+                GameObject randomPart = lefParts[(Random.Range(0, lefParts.Count))];
+
+                if (!deathParts.Contains(randomPart))
+                {
+                    randomPart.gameObject.AddComponent<DeathPart>();
+                    deathParts.Add(randomPart);
+                }
+            }
+        }
     }
 }
