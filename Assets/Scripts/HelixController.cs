@@ -52,7 +52,7 @@ public class HelixController : MonoBehaviour
 
         Camera.main.backgroundColor=allStages[stageNumber].stageBackgroundColor;
 
-        FindObjectOfType<PlayerController>().GetComponent<Renderer>().material.color = allStages[stageNumber].stageBackgroundColor;
+        FindObjectOfType<PlayerController>().GetComponent<Renderer>().material.color = allStages[stageNumber].stagePlayerColor;
 
         transform.localEulerAngles = startRotation;
 

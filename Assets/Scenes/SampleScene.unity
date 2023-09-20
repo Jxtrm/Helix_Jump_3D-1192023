@@ -372,6 +372,8 @@ MonoBehaviour:
   goalTransform: {fileID: 3350069789956784611}
   helixLevelPrefab: {fileID: 7708030526119349921, guid: 82f6cdd4a6ce8cf479c79e4d0beaf4c9, type: 3}
   allStages:
+  - {fileID: 11400000, guid: acaf386869a1ccb42bd063df5fe5a860, type: 2}
+  - {fileID: 11400000, guid: a7d7983eb6a09b14682005d60e4f05c6, type: 2}
   - {fileID: 11400000, guid: 2740ae946c3f93847957381a3729851d, type: 2}
   helixDistance: 0
 --- !u!1 &621967848
