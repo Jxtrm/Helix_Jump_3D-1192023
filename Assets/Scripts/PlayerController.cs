@@ -7,11 +7,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float impulsePlayer = 3f;
     [SerializeField] private float superSpeed = 8;
+    [SerializeField] private int perfectPassCount = 3;
+    [HideInInspector] public int perfectPass;
     private bool ignoreNextCollision;
     private Vector3 startPosition;
-    [HideInInspector] public int perfectPass;
     private bool itsSuperSpeed;
-    [SerializeField] private int perfectPassCount = 3;
+    public GameObject splash;
 
     private void Start()
     {
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        AddSplash(collision);
         if (ignoreNextCollision)
         {
             return;
@@ -27,6 +29,7 @@ public class PlayerController : MonoBehaviour
 
         if (itsSuperSpeed && !collision.transform.GetComponent<GoalController>())
         {
+            GameManager.singleton.AddScore(1);
             Destroy(collision.transform.parent.gameObject, 0.2f);
         }
         else
@@ -63,5 +66,14 @@ public class PlayerController : MonoBehaviour
     public void ResetBall()
     {
         transform.position = startPosition;
+    }
+
+    public void AddSplash(Collision collision)
+    {
+        GameObject newSplash;
+        newSplash = Instantiate(splash);
+        newSplash.transform.SetParent(collision.transform);
+        newSplash.transform.position = new Vector3(transform.position.x, transform.position.y - 0.11f, transform.position.z);
+        Destroy(newSplash, 3f);
     }
 }

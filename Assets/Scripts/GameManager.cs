@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public int bestScore;
     public int currentScore;
-    [SerializeField] private int currentLevel = 0;
+    public int currentLevel = 0;
     public static GameManager singleton;
     // Start is called before the first frame update
     void Awake()

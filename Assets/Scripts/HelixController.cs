@@ -54,7 +54,7 @@ public class HelixController : MonoBehaviour
 
         FindObjectOfType<PlayerController>().GetComponent<Renderer>().material.color = allStages[stageNumber].stagePlayerColor;
         FindObjectOfType<PlayerController>().GetComponent<TrailRenderer>().material.color = allStages[stageNumber].stagePlayerColor;
-
+        FindObjectOfType<PlayerController>(gameObject).splash.GetComponent<SpriteRenderer>().color = allStages[stageNumber].stagePlayerColor;
         transform.localEulerAngles = startRotation;
 
         foreach (GameObject go in spawnedLevels)
