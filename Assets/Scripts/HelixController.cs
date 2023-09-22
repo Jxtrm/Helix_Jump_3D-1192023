@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HelixController : MonoBehaviour
 {
@@ -51,10 +52,10 @@ public class HelixController : MonoBehaviour
         }
 
         Camera.main.backgroundColor=allStages[stageNumber].stageBackgroundColor;
-
         FindObjectOfType<PlayerController>().GetComponent<Renderer>().material.color = allStages[stageNumber].stagePlayerColor;
         FindObjectOfType<PlayerController>().GetComponent<TrailRenderer>().material.color = allStages[stageNumber].stagePlayerColor;
         FindObjectOfType<PlayerController>(gameObject).splash.GetComponent<SpriteRenderer>().color = allStages[stageNumber].stagePlayerColor;
+        UIManager.FindObjectOfType<Slider>(gameObject).fillRect.gameObject.GetComponent<Image>().color = allStages[stageNumber].stagePlayerColor;
         transform.localEulerAngles = startRotation;
 
         foreach (GameObject go in spawnedLevels)

@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Audio;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public int bestScore;
-    public int currentScore;
-    public int currentLevel = 0;
+    [SerializeField] private AudioSource winAudio;
+    [HideInInspector] public TMP_Text onePointText;
+    [HideInInspector] public int bestScore;
+    [HideInInspector] public int currentScore;
+    [HideInInspector] public int currentLevel = 0;
     public static GameManager singleton;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -28,6 +33,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     public void NextLevel()
     {
+        winAudio.Play();
         currentLevel++;
         FindObjectOfType<PlayerController>().ResetBall(); 
         FindObjectOfType<HelixController>().LoadStage(currentLevel);
@@ -44,6 +50,8 @@ public class GameManager : MonoBehaviour
 
     public void AddScore(int scoreToAdd)
     {
+        onePointText.GetComponent<Animation>().Play();
+
         currentScore += scoreToAdd;
         if (currentScore > bestScore)
         {

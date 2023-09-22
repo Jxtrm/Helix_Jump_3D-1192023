@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,11 +9,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float impulsePlayer = 3f;
     [SerializeField] private float superSpeed = 8;
     [SerializeField] private int perfectPassCount = 3;
+    [SerializeField] private AudioSource collisionAudio;
     [HideInInspector] public int perfectPass;
     private bool ignoreNextCollision;
     private Vector3 startPosition;
     private bool itsSuperSpeed;
     public GameObject splash;
+    
 
     private void Start()
     {
@@ -21,6 +24,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        collisionAudio.Play();
         AddSplash(collision);
         if (ignoreNextCollision)
         {
@@ -31,6 +35,7 @@ public class PlayerController : MonoBehaviour
         {
             GameManager.singleton.AddScore(1);
             Destroy(collision.transform.parent.gameObject, 0.2f);
+            GameManager.singleton.onePointText.GetComponent<Animation>().Play();
         }
         else
         {
